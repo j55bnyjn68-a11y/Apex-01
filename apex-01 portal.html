@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>APEX-01 — Investor Portal</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#070B19; --navy2:#0C1330; --cyan:#00F0FF; --cobalt:#3B82F6;
+    --card:rgba(15,22,48,0.65); --line:rgba(59,130,246,0.25);
+    padding-top: env(safe-area-inset-top,0px); padding-bottom: env(safe-area-inset-bottom,0px);
+  }
+  html{scroll-padding-top:70px;}
+  html,body{height:100%;background:var(--navy);}
+  body{font-family:'Space Grotesk',sans-serif;color:#E6ECFF;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  .glass{background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--line);}
+  .glow-text{text-shadow:0 0 18px rgba(0,240,255,0.45);}
+  .cyan{color:var(--cyan);}
+  .grad-accent{background:linear-gradient(90deg,var(--cyan),var(--cobalt));}
+  .bg-radial{background:radial-gradient(circle at 20% 0%,rgba(59,130,246,0.18),transparent 55%),radial-gradient(circle at 80% 30%,rgba(0,240,255,0.10),transparent 45%),var(--navy);}
+  .tabbtn{transition:.2s;border-bottom:2px solid transparent;white-space:nowrap;}
+  .tabbtn.active{color:var(--cyan);border-color:var(--cyan);}
+  .badge-live{position:relative;}
+  .badge-live::before{content:'';position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px 2px var(--cyan);animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .section{display:none;}
+  .section.active{display:block;animation:fade .35s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  ::-webkit-scrollbar{height:6px;width:6px;} ::-webkit-scrollbar-thumb{background:var(--cobalt);border-radius:4px;}
+  .metric{font-size:1.6rem;font-weight:700;}
+  input,select{background:rgba(255,255,255,0.04);border:1px solid var(--line);color:#E6ECFF;}
+  input::placeholder{color:#6b7cad;}
+  .modal-bg{background:rgba(4,7,20,0.75);backdrop-filter:blur(4px);}
+</style>
+</head>
+<body class="bg-radial">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-40 glass" style="border-left:none;border-right:none;border-top:none;">
+  <div class="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-md grad-accent flex items-center justify-center text-navy" style="color:#070B19;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2L2 21h20L12 2z" stroke="#070B19" stroke-width="2"/></svg>
+      </div>
+      <span class="font-bold tracking-tight">APEX<span class="cyan">-01</span></span>
+    </div>
+    <div id="tabbar" class="hidden md:flex gap-5 text-sm mono overflow-x-auto"></div>
+    <button onclick="openModal()" class="text-xs px-3 py-1.5 rounded-md grad-accent font-semibold" style="color:#070B19;">Pitch Deck</button>
+  </div>
+  <div id="tabbar-mobile" class="md:hidden flex gap-4 px-4 pb-2 overflow-x-auto text-xs mono"></div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-4 pb-24">
+
+<!-- 1. HERO -->
+<section id="s0" class="section active pt-10">
+  <div class="flex items-center gap-3 mb-5">
+    <span class="mono text-xs cyan badge-live pl-4">TECHNE SUMMIT 2026 SHOWCASE</span>
+  </div>
+  <h1 class="text-3xl sm:text-5xl font-bold leading-tight glow-text">Revolutionizing Additive<br>Manufacturing in Emerging Markets</h1>
+  <p class="mt-4 text-slate-400 max-w-xl">The first affordable, high-precision 5-axis robotic 3D printer. Eliminating support waste and anisotropic layer weakness at a fraction of imported industrial costs.</p>
+  <div class="flex flex-wrap gap-3 mt-6">
+    <button onclick="openModal()" class="px-5 py-2.5 rounded-lg grad-accent font-semibold text-sm" style="color:#070B19;">Request Investor Deck / Pre-Order</button>
+    <button onclick="showTab(2)" class="px-5 py-2.5 rounded-lg glass font-semibold text-sm">View Technical Architecture</button>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-8">
+    <div class="glass rounded-xl p-4"><div class="metric cyan">45,000<span class="text-xs align-top ml-1">EGP</span></div><div class="text-xs text-slate-400 mt-1">Retail price · &lt;$1,000 vs $60K+ imported</div></div>
+    <div class="glass rounded-xl p-4"><div class="metric cyan">55.6%</div><div class="text-xs text-slate-400 mt-1">Gross margin · 20K COGS → 25K profit/unit</div></div>
+    <div class="glass rounded-xl p-4"><div class="metric cyan">81%</div><div class="text-xs text-slate-400 mt-1">Material waste reduction, support-free</div></div>
+    <div class="glass rounded-xl p-4"><div class="metric cyan">6.35x</div><div class="text-xs text-slate-400 mt-1">Tensile strength boost, stress-aligned fill</div></div>
+  </div>
+</section>
+
+<!-- 2. TECH EDGE -->
+<section id="s1" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">3-Axis vs. APEX-01 5-Axis</h2>
+  <p class="text-slate-400 text-sm mb-6">Conventional planar slicing vs. multi-planar, curved deposition.</p>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="glass rounded-xl p-5">
+      <h3 class="font-semibold text-slate-300 mb-3">Conventional 3-Axis (Planar)</h3>
+      <ul class="text-sm text-slate-400 space-y-2">
+        <li>Flat horizontal 2.5D layers → severe "staircase" surface roughness</li>
+        <li>Overhangs &gt;45° need sacrificial supports — up to 30% material waste</li>
+        <li>Inter-layer Z-bonds 30–50% weaker than in-plane strength → delamination</li>
+      </ul>
+    </div>
+    <div class="glass rounded-xl p-5" style="border-color:rgba(0,240,255,0.4)">
+      <h3 class="font-semibold cyan mb-3">APEX-01 5-Axis (Multi-Planar)</h3>
+      <ul class="text-sm text-slate-300 space-y-2">
+        <li>Dynamic nozzle orientation prints onto curved & inclined substrates</li>
+        <li>0% temporary supports — saves up to 81% raw filament</li>
+        <li>Isotropic strength: fill follows stress vectors → up to 6.35x tensile</li>
+        <li>51% less print time · 63% less surface roughness (Ra)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 3. KINEMATICS -->
+<section id="s2" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">Kinematic Optimization & Build Envelope</h2>
+  <p class="text-slate-400 text-sm mb-6">Why 5 DOF, and the geometry behind the 46 cm reach.</p>
+  <div class="glass rounded-xl p-5 mb-4">
+    <h3 class="font-semibold mb-2">5 DOF vs. 6 DOF</h3>
+    <p class="text-sm text-slate-400">A circular extrusion nozzle is axisymmetric — rotating it about its own vertical axis (the 6th joint) changes nothing in deposition. Removing that joint cuts motor weight and wrist backlash, letting analytical Inverse Kinematics run in real time on affordable embedded microcontrollers.</p>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-4">
+    <div class="glass rounded-xl p-5">
+      <h3 class="font-semibold mb-3 mono text-sm">Geometry — 46 cm sweet spot</h3>
+      <div class="text-sm space-y-1.5 text-slate-300 mono">
+        <div class="flex justify-between"><span class="text-slate-500">Base height</span><span>120 mm</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Upper arm (J2→J3)</span><span>200 mm</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Forearm (J3→J4)</span><span>200 mm</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Wrist offset</span><span>60 mm</span></div>
+        <div class="flex justify-between border-t border-slate-700 pt-1.5 mt-1.5"><span class="cyan">Max reach</span><span class="cyan">460 mm</span></div>
+      </div>
+      <p class="text-xs text-slate-500 mt-3">Envelops a 25×25×25 cm print volume without joint singularities.</p>
+    </div>
+    <div class="glass rounded-xl p-5">
+      <h3 class="font-semibold mb-3 mono text-sm">25:1 Cycloidal Drives</h3>
+      <p class="text-sm text-slate-400">Custom 3D-printed cycloidal gearboxes on J1, J2, J3 — 31 hardened steel dowel pins, 25-lobe disc, zero-backlash rolling engagement.</p>
+      <div class="mt-3 flex gap-4">
+        <div><div class="metric cyan text-lg">11.7 Nm</div><div class="text-xs text-slate-500">Output torque</div></div>
+        <div><div class="metric cyan text-lg">5.9x</div><div class="text-xs text-slate-500">Safety factor (500g load)</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. BOM -->
+<section id="s3" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">Hardware Architecture & BOM</h2>
+  <p class="text-slate-400 text-sm mb-6">How the 20,000 EGP manufacturing budget breaks down.</p>
+  <div class="space-y-3" id="bom"></div>
+  <div class="glass rounded-xl p-4 mt-4 flex justify-between items-center">
+    <span class="mono text-sm">Total COGS: <b class="cyan">20,000 EGP</b></span>
+    <span class="mono text-sm">Retail: <b class="cyan">45,000 EGP</b></span>
+  </div>
+</section>
+
+<!-- 5. PIPELINE -->
+<section id="s4" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">Software Pipeline & Slicing Toolchain</h2>
+  <p class="text-slate-400 text-sm mb-6">From CAD to ~15-micron nozzle precision.</p>
+  <div class="grid sm:grid-cols-2 gap-4" id="pipeline"></div>
+</section>
+
+<!-- 6. BUSINESS -->
+<section id="s5" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">Business Model & Financial Projections</h2>
+  <div class="grid sm:grid-cols-3 gap-3 mb-5">
+    <div class="glass rounded-xl p-4"><div class="metric cyan text-xl">20,000 EGP</div><div class="text-xs text-slate-400">Unit cost</div></div>
+    <div class="glass rounded-xl p-4"><div class="metric cyan text-xl">45,000 EGP</div><div class="text-xs text-slate-400">Unit price</div></div>
+    <div class="glass rounded-xl p-4"><div class="metric cyan text-xl">8 units</div><div class="text-xs text-slate-400">Breakeven volume</div></div>
+  </div>
+  <h3 class="font-semibold mb-2 text-sm mono">Target Segments</h3>
+  <ul class="text-sm text-slate-400 space-y-1.5 mb-5 list-disc pl-5">
+    <li>Engineering universities & STEM centers — affordable multi-axis research machines</li>
+    <li>Industrial prototyping labs & tooling workshops — fast, high-strength brackets vs. CNC</li>
+    <li>Architectural & design studios — support-free organic geometries</li>
+  </ul>
+  <h3 class="font-semibold mb-2 text-sm mono">Competitive Landscape</h3>
+  <div class="overflow-x-auto">
+  <table class="w-full text-sm glass rounded-xl overflow-hidden">
+    <thead><tr class="text-left text-slate-400 border-b border-slate-700"><th class="p-3">System</th><th class="p-3">Price</th><th class="p-3">Capability</th></tr></thead>
+    <tbody class="mono text-xs sm:text-sm">
+    <tr class="border-b border-slate-800"><td class="p-3">Industrial 5-Axis (DMG Mori / Weber)</td><td class="p-3">$100,000+</td><td class="p-3 text-slate-500">Inaccessible</td></tr>
+    <tr class="border-b border-slate-800"><td class="p-3">Desktop 3-Axis (Bambu / Prusa)</td><td class="p-3">35–65K EGP</td><td class="p-3 text-slate-500">No non-planar / support-free</td></tr>
+    <tr><td class="p-3 cyan">APEX-01 5-Axis</td><td class="p-3 cyan">45,000 EGP</td><td class="p-3 cyan">Full 5-axis, local warranty & parts</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p class="text-xs text-slate-500 mt-4">Recurring revenue: carbon-fiber PETG & nylon filaments, replacement nozzles/belts, certified maintenance (5,000 EGP/yr).</p>
+</section>
+
+<!-- 7. TEAM -->
+<section id="s6" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">Team — Nile University Mechatronics</h2>
+  <p class="text-slate-400 text-sm mb-6">8-member, balanced technical & commercial hierarchy.</p>
+  <div class="grid sm:grid-cols-2 gap-6">
+    <div>
+      <h3 class="font-semibold cyan mb-3 text-sm mono">Technical (4)</h3>
+      <div class="space-y-2 text-sm">
+        <div class="glass rounded-lg p-3">Lead Mechanical & Structural Engineer <span class="text-slate-500">— CAD, cycloidal gears, PETG fabrication</span></div>
+        <div class="glass rounded-lg p-3">Lead Embedded & Power Electronics Engineer <span class="text-slate-500">— ESP32, DRV8825, thermal safety</span></div>
+        <div class="glass rounded-lg p-3">Kinematics & Slicing Software Engineer <span class="text-slate-500">— RoboDK, G-code, D-H matrices</span></div>
+        <div class="glass rounded-lg p-3">Reliability & Live Demo Lead <span class="text-slate-500">— stress testing, booth demo loops</span></div>
+      </div>
+    </div>
+    <div>
+      <h3 class="font-semibold cyan mb-3 text-sm mono">Business (4)</h3>
+      <div class="space-y-2 text-sm">
+        <div class="glass rounded-lg p-3">Founder & CEO / Lead Pitcher <span class="text-slate-500">— vision, investor relations</span></div>
+        <div class="glass rounded-lg p-3">Market Validation & Customer Discovery Lead <span class="text-slate-500">— pre-orders, LOIs</span></div>
+        <div class="glass rounded-lg p-3">Chief Financial Officer <span class="text-slate-500">— modeling, supplier negotiation</span></div>
+        <div class="glass rounded-lg p-3">Growth, Marketing & Booth Lead <span class="text-slate-500">— brand, lead gen</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. ASK -->
+<section id="s7" class="section pt-10">
+  <h2 class="text-2xl font-bold mb-1">Investment Opportunity — The Ask</h2>
+  <p class="text-slate-400 text-sm mb-6">Current milestone: validated CAD assembly, verified BOM, calibrated firmware pipeline, working prototype.</p>
+  <div class="glass rounded-xl p-5 mb-6">
+    <div class="metric cyan mb-2">$15,000 USD <span class="text-sm text-slate-400 font-normal">/ ~750,000 EGP</span></div>
+    <p class="text-xs text-slate-500 mb-3">Pre-Seed Funding / Incubation to:</p>
+    <ul class="text-sm text-slate-300 space-y-1.5 list-disc pl-5">
+      <li>Set up small-batch assembly & testing station in Cairo</li>
+      <li>Fulfill first commercial pilot batch of 10 APEX-01 units for pre-order partners</li>
+      <li>Transition high-wear cycloidal gears to precision CNC aluminum</li>
+    </ul>
+  </div>
+  <button onclick="openModal()" class="px-5 py-2.5 rounded-lg grad-accent font-semibold text-sm" style="color:#070B19;">Request Executive Summary & Schedule Meeting</button>
+</section>
+
+</main>
+
+<!-- MODAL -->
+<div id="modal" class="fixed inset-0 modal-bg hidden items-center justify-center z-50 p-4">
+  <div class="glass rounded-2xl p-6 w-full max-w-md">
+    <div id="formView">
+      <h3 class="text-lg font-bold mb-1">Request Executive Summary</h3>
+      <p class="text-xs text-slate-400 mb-4">We'll follow up with the full deck and a meeting slot.</p>
+      <div class="space-y-3">
+        <input class="w-full rounded-lg px-3 py-2 text-sm" placeholder="Full name" id="f_name">
+        <input class="w-full rounded-lg px-3 py-2 text-sm" placeholder="Organization / Fund" id="f_org">
+        <input class="w-full rounded-lg px-3 py-2 text-sm" placeholder="Email" id="f_email">
+        <input class="w-full rounded-lg px-3 py-2 text-sm" placeholder="Phone / WhatsApp" id="f_phone">
+        <select class="w-full rounded-lg px-3 py-2 text-sm" id="f_type">
+          <option value="">Investor type…</option>
+          <option>Angel</option><option>VC</option><option>Commercial Customer Pre-Order</option><option>Academic Partner</option>
+        </select>
+      </div>
+      <div class="flex gap-2 mt-5">
+        <button onclick="closeModal()" class="flex-1 py-2 rounded-lg glass text-sm">Cancel</button>
+        <button onclick="submitForm()" class="flex-1 py-2 rounded-lg grad-accent font-semibold text-sm" style="color:#070B19;">Submit</button>
+      </div>
+    </div>
+    <div id="confirmView" class="hidden text-center py-4">
+      <div class="w-12 h-12 rounded-full grad-accent mx-auto mb-3 flex items-center justify-center" style="color:#070B19;">✓</div>
+      <h3 class="font-bold mb-1">Request Received</h3>
+      <p class="text-sm text-slate-400 mb-4">The APEX-01 team will reach out shortly with the executive summary.</p>
+      <button onclick="closeModal()" class="px-5 py-2 rounded-lg glass text-sm">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const tabs=["Overview","Technology","Kinematics","Hardware","Software","Business","Team","The Ask"];
+const bar=document.getElementById('tabbar'), barM=document.getElementById('tabbar-mobile');
+tabs.forEach((t,i)=>{
+  [bar,barM].forEach(el=>{
+    const b=document.createElement('button');
+    b.textContent=t; b.className='tabbtn py-4 md:py-1'+(i===0?' active':'');
+    b.onclick=()=>showTab(i);
+    b.id=(el===bar?'tab-':'tabm-')+i;
+    el.appendChild(b);
+  });
+});
+function showTab(i){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('s'+i).classList.add('active');
+  document.querySelectorAll('.tabbtn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+i).classList.add('active');
+  document.getElementById('tabm-'+i).classList.add('active');
+  document.getElementById('tabm-'+i).scrollIntoView({inline:'center',behavior:'smooth'});
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function openModal(){document.getElementById('modal').classList.remove('hidden');document.getElementById('modal').classList.add('flex');}
+function closeModal(){document.getElementById('modal').classList.add('hidden');document.getElementById('modal').classList.remove('flex');document.getElementById('formView').classList.remove('hidden');document.getElementById('confirmView').classList.add('hidden');}
+function submitForm(){document.getElementById('formView').classList.add('hidden');document.getElementById('confirmView').classList.remove('hidden');}
+
+const bomData=[
+ {t:"Actuators & Motion",p:"7,500 EGP",d:"High-torque NEMA 23 (Japan Servo & Minebea, 2.0A) on base/shoulder/elbow · NEMA 17 (48mm) wrist pitch, pancake 25mm/180g wrist yaw · custom 25:1 steel-pin cycloidal gearboxes & HTD3M 6mm belts."},
+ {t:"Processing & Electronics",p:"3,500 EGP",d:"32-bit dual-core ESP32 motion controller (modified Marlin) · TI DRV8825 drivers, 1/32 microstepping · dual external MOSFET modules for isolated 24V thermal regulation."},
+ {t:"Extrusion & Thermal",p:"4,000 EGP",d:"BMG dual-drive extruder, 3:1 reduction, base-mounted Bowden feed · 24V all-metal E3D V6 hotend, 100K NTC + 40W cartridge · stationary 24V 220×220mm heated bed · 24V 350W Mean Well LRS PSU."},
+ {t:"Structural & Hardware",p:"3,000 EGP",d:"Creep-resistant PETG/ASA (100% infill gears, 45% gyroid links) · 4-inch steel Lazy Susan bearing · 6008 ZZ bearings (40mm hollow center) · DIN 912 fasteners."},
+ {t:"Assembly, QC & Calibration",p:"2,000 EGP",d:"Final assembly, quality control and calibration buffer."},
+];
+document.getElementById('bom').innerHTML=bomData.map(b=>`
+  <div class="glass rounded-xl p-4 flex justify-between items-start gap-4">
+    <div><div class="font-semibold text-sm">${b.t}</div><div class="text-xs text-slate-400 mt-1">${b.d}</div></div>
+    <div class="mono text-sm cyan whitespace-nowrap">${b.p}</div>
+  </div>`).join('');
+
+const pipe=[
+ {n:"01",t:"CAD & Curved Path Generation",d:"Fusion 360 & custom Grasshopper/Rhino non-planar toolpath generation."},
+ {n:"02",t:"Kinematic Simulation & Digital Twin",d:"RoboDK offline programming — collision-free 5-axis toolpaths, singularity avoidance."},
+ {n:"03",t:"Real-Time Coordinate Transformation",d:"Modified Marlin on ESP32 computes Denavit–Hartenberg matrices in-loop."},
+ {n:"04",t:"Physical Execution",d:"Microstepping pulses to DRV8825 drivers — ~15-micron linear nozzle precision."},
+];
+document.getElementById('pipeline').innerHTML=pipe.map(p=>`
+  <div class="glass rounded-xl p-4">
+    <div class="mono cyan text-xs mb-1">${p.n}</div>
+    <div class="font-semibold text-sm mb-1">${p.t}</div>
+    <div class="text-xs text-slate-400">${p.d}</div>
+  </div>`).join('');
+</script>
+</body>
+</html>
